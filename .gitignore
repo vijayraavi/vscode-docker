@@ -10,3 +10,4 @@ coverage/**
 testOutput
 .vs
 test-results.xml
+dist

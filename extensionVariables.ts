@@ -3,11 +3,13 @@
  *  Licensed under the MIT License. See LICENSE.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+debugger;
+
 import * as osNode from 'os';
 import { RequestAPI, RequiredUriUrl } from 'request';
 import { RequestPromise, RequestPromiseOptions } from 'request-promise-native';
 import { ExtensionContext, OutputChannel, Terminal } from "vscode";
-import { IAzureUserInput, ITelemetryReporter } from "vscode-azureextensionui";
+import { IAzureUserInput, IPackageInfo, ITelemetryReporter } from "vscode-azureextensionui";
 import { ITerminalProvider } from "./commands/utils/TerminalProvider";
 import { IKeytar } from './utils/keytar';
 
@@ -23,6 +25,7 @@ export namespace ext {
     export let reporter: ITelemetryReporter;
     export let terminalProvider: ITerminalProvider;
     export let keytar: IKeytar | undefined;
+    export let packageInfo: IPackageInfo;
 
     /**
      * A version of 'request-promise' which should be used for all direct request calls (it has the user agent set up properly)

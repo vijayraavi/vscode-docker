@@ -3,10 +3,7 @@
  *  Licensed under the MIT License. See LICENSE.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-let loadStartTime = Date.now();
-
 import * as assert from 'assert';
-import * as opn from 'opn';
 import * as path from 'path';
 import * as request from 'request-promise-native';
 import * as vscode from 'vscode';
@@ -35,6 +32,7 @@ import { docker } from './commands/utils/docker-endpoint';
 import { DefaultTerminalProvider } from './commands/utils/TerminalProvider';
 import { DockerDebugConfigProvider } from './configureWorkspace/configDebugProvider';
 import { configure, configureApi, ConfigureApiOptions } from './configureWorkspace/configure';
+import { isWebPack } from './constants';
 import { registerDebugConfigurationProvider } from './debugging/coreclr/registerDebugger';
 import { DockerComposeCompletionItemProvider } from './dockerCompose/dockerComposeCompletionItemProvider';
 import { DockerComposeHoverProvider } from './dockerCompose/dockerComposeHoverProvider';
@@ -57,6 +55,7 @@ import { browseAzurePortal } from './explorer/utils/browseAzurePortal';
 import { browseDockerHub, dockerHubLogout } from './explorer/utils/dockerHubUtils';
 import { ext } from "./extensionVariables";
 import { initializeTelemetryReporter, reporter } from './telemetry/telemetry';
+import { TestKeytar } from './test/testKeytar';
 import { AzureAccount } from './typings/azure-account.api';
 import { addUserAgent } from './utils/addUserAgent';
 import { AzureUtilityManager } from './utils/azureUtilityManager';
@@ -90,6 +89,7 @@ function initializeExtensionVariables(ctx: vscode.ExtensionContext): void {
         ext.ui = new AzureUserInput(ctx.globalState);
     }
     ext.context = ctx;
+    ext.packageInfo = require('./package.json');
     ext.outputChannel = util.getOutputChannel();
     if (!ext.terminalProvider) {
         ext.terminalProvider = new DefaultTerminalProvider();
@@ -106,7 +106,7 @@ function initializeExtensionVariables(ctx: vscode.ExtensionContext): void {
     ext.request = request.defaults(defaultRequestOptions);
 }
 
-export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
+export async function activate(ctx: vscode.ExtensionContext, loadStartTime: number, loadEndTime: number): Promise<void> {
     let activateStartTime = Date.now();
 
     initializeExtensionVariables(ctx);
@@ -275,7 +275,8 @@ namespace Configuration {
 }
 
 function activateLanguageClient(ctx: vscode.ExtensionContext): void {
-    let serverModule = ctx.asAbsolutePath(path.join("node_modules", "dockerfile-language-server-nodejs", "lib", "server.js"));
+    let serverModule = ctx.asAbsolutePath(path.join(isWebPack ? 'dist' : '', "node_modules", "dockerfile-language-server-nodejs", "lib", "server.js"));
+    vscode.window.showInformationMessage(serverModule);
     let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
 
     let serverOptions: ServerOptions = {
@@ -305,5 +306,3 @@ function activateLanguageClient(ctx: vscode.ExtensionContext): void {
     });
     client.start();
 }
-
-let loadEndTime = Date.now();

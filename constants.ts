@@ -3,6 +3,11 @@
  *  Licensed under the MIT License. See LICENSE.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import * as path from 'path';
+
+export const isWebPack = path.basename(__dirname) !== 'out';
+export const imagesPath: string = path.join(__dirname, isWebPack ? '../images' : 'images');
+
 //AsyncPool Constants
 export const MAX_CONCURRENT_REQUESTS = 8;
 export const MAX_CONCURRENT_SUBSCRIPTON_REQUESTS = 5;
