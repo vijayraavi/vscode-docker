@@ -7,6 +7,7 @@ import * as assert from 'assert';
 import * as path from 'path';
 import * as request from 'request-promise-native';
 import * as vscode from 'vscode';
+import { IPackageInfo } from "vscode-azureextensionui";
 import { AzureUserInput, callWithTelemetryAndErrorHandling, createTelemetryReporter, IActionContext, parseError, registerCommand as uiRegisterCommand, registerUIExtensionVariables, TelemetryProperties, UserCancelledError } from 'vscode-azureextensionui';
 import { ConfigurationParams, DidChangeConfigurationNotification, DocumentSelector, LanguageClient, LanguageClientOptions, Middleware, ServerOptions, TransportKind } from 'vscode-languageclient/lib/main';
 import { createRegistry } from './commands/azureCommands/create-registry';
@@ -89,7 +90,7 @@ function initializeExtensionVariables(ctx: vscode.ExtensionContext): void {
         ext.ui = new AzureUserInput(ctx.globalState);
     }
     ext.context = ctx;
-    ext.packageInfo = require('./package.json');
+    ext.packageInfo = <IPackageInfo>require('./package.json');
     ext.outputChannel = util.getOutputChannel();
     if (!ext.terminalProvider) {
         ext.terminalProvider = new DefaultTerminalProvider();

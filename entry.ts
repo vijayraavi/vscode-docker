@@ -8,6 +8,7 @@ const loadStartTime = Date.now();
 import * as vscode from 'vscode';
 import * as dockerExtension from './dockerExtension';
 
+//asdf
 export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
     dockerExtension.activate(ctx, loadStartTime, loadEndTime);
 }
