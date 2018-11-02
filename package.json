@@ -65,7 +65,7 @@
     "onDebugInitialConfigurations",
     "onDebugResolve:docker-coreclr"
   ],
-  "main": "./out/dockerExtension",
+  "main": "dist/extension",
   "contributes": {
     "menus": {
       "commandPalette": [
@@ -763,14 +763,16 @@
     "vscode": "^1.25.0"
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
+    "vscode:prepublish": "npm run build && webpack --mode production",
     "build": "tsc -p ./",
     "compile": "tsc -watch -p ./",
     "lint": "tslint --project tsconfig.json -t verbose",
     "lint-fix": "tslint --project tsconfig.json -t verbose --fix",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run build && cross-env CODE_TESTS_WORKSPACE=./test/test.code-workspace DEBUGTELEMETRY=1 node ./node_modules/vscode/bin/test",
-    "all": "npm i && npm run lint && npm test"
+    "all": "npm i && npm run lint && npm test",
+    "webpack": "npm run build && webpack --mode development",
+    "webpack-watch": "webpack --mode development --watch"
   },
   "extensionDependencies": [
     "vscode.docker",
@@ -789,15 +791,21 @@
     "@types/semver": "^5.5.0",
     "adm-zip": "^0.4.11",
     "azure-storage": "^2.8.1",
+    "copy-webpack-plugin": "^4.5.4",
     "cross-env": "^5.2.0",
     "gulp": "^4.0.0",
     "mocha": "5.2.0",
     "tslint": "^5.11.0",
     "tslint-microsoft-contrib": "^5.2.1",
+    "ts-loader": "^4.4.2",
     "typescript": "^3.1.1",
     "vsce": "^1.51.1",
-    "vscode": "^1.1.18"
+    "vscode": "^1.1.18",
+    "umd-compat-loader": "^2.1.1",
+    "webpack": "^4.19.1",
+    "webpack-cli": "^3.1.0"
   },
+  "asdf": null,
   "dependencies": {
     "azure-arm-containerregistry": "^2.3.0",
     "azure-arm-resource": "^2.0.0-preview",
@@ -813,8 +821,9 @@
     "pom-parser": "^1.1.1",
     "request-promise-native": "^1.0.5",
     "semver": "^5.5.1",
-    "vscode-azureextensionui": "^0.17.0",
+    "vscode-azureextensionui": "file:../vscode-azuretools/ui/vscode-azureextensionui-0.18.4.tgz",
     "vscode-extension-telemetry": "^0.0.22",
-    "vscode-languageclient": "^4.4.0"
+    "vscode-languageclient": "^5.1.1",
+    "vscode-nls-dev": "^3.2.3"
   }
 }

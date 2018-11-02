@@ -1,3 +1,4 @@
+# This excludes files from being included in the extension's package
 .vscode/**
 typings/**
 **/*.ts
@@ -7,3 +8,14 @@ tsconfig.json
 test/**
 testOutput/**
 .github/**
+node_modules/**
+src/**
+out/**
+gulp*
+*.json
+webpack*
+*.js
+docs/**
+utils/*.js
+*.bat
+*.yml
