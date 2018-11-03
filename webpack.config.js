@@ -13,14 +13,26 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackEntriesPlugin = require('webpack-entries-plugin');
+const WebpackWatchedGlobEntries = require('webpack-watched-glob-entries-plugin');
+const resolve = require('path').resolve;
+const glob = require('glob');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+
+const testRoot = path.resolve(__dirname, 'out', 'test');
+let testFiles = glob.sync("*.js", { absolute: false, cwd: testRoot });
+let testEntries = {};
+for (let file of testFiles) {
+    testEntries[`${path.join('test', path.dirname(file), path.basename(file))}`] = `./out/test/${file}`;
+}
+console.log(testEntries);
 
 /**@type {import('webpack').Configuration}*/
 const config = {
     target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
     node: {
-        // Use normal Node.js behavior for __dirname and __filename (folder/file of the bundle .js file)
+        // Use normal Node.js behavior for __dirname and __filename (set to folder/file of the bundle .js file)
         __dirname: false,
         __filename: false
     },
@@ -28,8 +40,20 @@ const config = {
         // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
         extension: './entry.ts',
         './node_modules/dockerfile-language-server-nodejs/lib/server': './node_modules/dockerfile-language-server-nodejs/lib/server.js',
-        'ms-rest/lib/msRest': './node_modules/ms-rest/lib/msRest.js'
+        'ms-rest/lib/msRest': './node_modules/ms-rest/lib/msRest.js',
+        'test/index': './out/test/index.js',
+        ...testEntries
     },
+    // {
+    // // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
+    // extension: './entry.ts',
+    // './node_modules/dockerfile-language-server-nodejs/lib/server': './node_modules/dockerfile-language-server-nodejs/lib/server.js',
+    // 'ms-rest/lib/msRest': './node_modules/ms-rest/lib/msRest.js',
+    // 'test/index': './out/test/index.js'
+    // },
+    // entries: [
+    //     resolve('out/test/:name') // `: name` will automatically be mapped as entry name
+    // ],
     output: { // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
@@ -45,10 +69,14 @@ const config = {
             './getCoreNodeModule': 'commonjs getCoreNodeModule',
 
             // ms-rest's serviceClient makes assumptions about its folder structure on disk
-            './serviceClient': 'commonjs ms-rest/lib/serviceClient'
+            './serviceClient': 'commonjs ms-rest/lib/serviceClient',
+
+            'mocha': 'commonjs mocha',
+            'adm-zip': 'commonjs adm-zip'
         },
     ],
     plugins: [
+        //new WebpackEntriesPlugin(),
         // Ignore dynamic require in vscode-nls (in vscode-azureextensionui) for now, since we're not localized
         //new webpack.IgnorePlugin(/vscode-nls/),
         new CopyWebpackPlugin([
@@ -107,9 +135,6 @@ const config = {
                 use: { loader: 'umd-compat-loader' }
             }
         ]
-    },
-    optimization: {
-        // minimize: process.env. ENV === 'production'
     }
 }
 

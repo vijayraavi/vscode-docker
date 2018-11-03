@@ -15,6 +15,8 @@
 // to report the results back to the caller. When the tests are finished, return
 // a possible error to the callback or null if none.
 
+debugger;
+
 // tslint:disable-next-line:no-require-imports no-var-requires
 let testRunner = require('vscode/lib/testrunner');
 
@@ -55,3 +57,14 @@ console.warn(`Mocha options: ${JSON.stringify(options, null, 2)}`);
 testRunner.configure(options);
 
 module.exports = testRunner;
+
+var cache = {};
+
+// function importAll(r) {
+//     r.keys().forEach(key => cache[key] = r(key));
+// }
+
+// importAll((<any>require).context('./', true, /^\.\/*\.js/));
+// let all: string;
+// all = '';
+// require('./' + all + ".js");

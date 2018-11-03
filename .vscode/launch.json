@@ -28,12 +28,12 @@
 			"args": [
 				"${workspaceFolder}/test/test.code-workspace",
 				"--extensionDevelopmentPath=${workspaceFolder}",
-				"--extensionTestsPath=${workspaceFolder}/out/test"
+				"--extensionTestsPath=${workspaceFolder}/dist/test"
 			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceFolder}/../dist/**/*.js"
+				"${workspaceFolder}/../dist/test/**/*.js"
 			],
 			"preLaunchTask": "npm: webpack",
 			"env": {
