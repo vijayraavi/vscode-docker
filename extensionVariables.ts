@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See LICENSE.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-debugger;
+debugger; // 1234ext
 
 import * as osNode from 'os';
 import { RequestAPI, RequiredUriUrl } from 'request';

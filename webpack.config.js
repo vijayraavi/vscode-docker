@@ -20,11 +20,13 @@ const glob = require('glob');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
+// Create a separate bundle for each test file, they'll get loaded by the test runner
 const testRoot = path.resolve(__dirname, 'out', 'test');
 let testFiles = glob.sync("*.js", { absolute: false, cwd: testRoot });
+console.log(testFiles);
 let testEntries = {};
 for (let file of testFiles) {
-    testEntries[`${path.join('test', path.dirname(file), path.basename(file))}`] = `./out/test/${file}`;
+    testEntries[`${path.join('test', path.dirname(file), path.basename(file, '.js'))}`] = `./out/test/${file}`;
 }
 console.log(testEntries);
 
@@ -40,7 +42,7 @@ const config = {
         // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
         extension: './entry.ts',
         './node_modules/dockerfile-language-server-nodejs/lib/server': './node_modules/dockerfile-language-server-nodejs/lib/server.js',
-        'ms-rest/lib/msRest': './node_modules/ms-rest/lib/msRest.js',
+        'ms-rest/lib/msRest-chunk': './node_modules/ms-rest/lib/msRest.js',
         'test/index': './out/test/index.js',
         ...testEntries
     },
@@ -59,6 +61,7 @@ const config = {
         filename: '[name].js',
         libraryTarget: "commonjs",
         devtoolModuleFilenameTemplate: "../[resource-path]",
+        //chunkFilename: 'chunk.[id].js'
     },
     devtool: 'source-map',
     externals: [
@@ -128,14 +131,34 @@ const config = {
             //         base: path.join(__dirname, 'src')
             //     }
             // },
-            {
-                // Unpack UMD module headers used in some modules since webpack doesn't
-                // handle them well
-                test: /dockerfile-language-service|vscode-languageserver/,
-                use: { loader: 'umd-compat-loader' }
-            }
+            // {
+            //     // Unpack UMD module headers used in some modules since webpack doesn't
+            //     // handle them well
+            //     test: /dockerfile-language-service|vscode-languageserver/,
+            //     use: { loader: 'umd-compat-loader' }
+            // }
         ]
+    },
+    optimization: {
+        //runtimeChunk: "single",
+        splitChunks: {
+            //chunks: "async",
+            minChunks: 1,
+            minSize: 1,
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'nodeModules-chunk',
+                    chunks: 'all'
+                },
+                extensionVars: {
+                    test: /extensionVar/,
+                    name: 'extensionVars',
+                    chunks: 'all'
+                }
+            }
+        },
     }
-}
+};
 
 module.exports = config;

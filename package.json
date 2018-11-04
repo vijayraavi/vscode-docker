@@ -771,7 +771,7 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run build && cross-env CODE_TESTS_WORKSPACE=./test/test.code-workspace DEBUGTELEMETRY=1 node ./node_modules/vscode/bin/test",
     "all": "npm i && npm run lint && npm test",
-    "webpack": "npm run build && webpack --mode development",
+    "webpack": "webpack --mode development",
     "webpack-watch": "webpack --mode development --watch"
   },
   "extensionDependencies": [

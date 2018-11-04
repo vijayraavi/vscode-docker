@@ -21,7 +21,7 @@
 			"preLaunchTask": "npm: webpack"
 		},
 		{
-			"name": "Launch Tests",
+			"name": "Launch Tests (Webpack)",
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
