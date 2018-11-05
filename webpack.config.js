@@ -13,9 +13,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const WebpackEntriesPlugin = require('webpack-entries-plugin');
-const WebpackWatchedGlobEntries = require('webpack-watched-glob-entries-plugin');
-const resolve = require('path').resolve;
 const glob = require('glob');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
@@ -59,7 +56,7 @@ const config = {
     output: { // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
-        libraryTarget: "commonjs",
+        libraryTarget: "commonjs2",
         devtoolModuleFilenameTemplate: "../[resource-path]",
         //chunkFilename: 'chunk.[id].js'
     },
@@ -114,6 +111,13 @@ const config = {
         extensions: ['.ts', '.js']
     },
     module: {
+        // preLoaders: [
+        //     {
+        //         test: /\.js$/,
+        //         loader: 'eslint',
+        //         exclude: /node_modules/
+        //     }
+        // ],
         rules: [
             {
                 test: /\.ts$/,
@@ -140,7 +144,7 @@ const config = {
         ]
     },
     optimization: {
-        //runtimeChunk: "single",
+        runtimeChunk: "single",
         splitChunks: {
             //chunks: "async",
             minChunks: 1,
