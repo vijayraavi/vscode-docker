@@ -15,11 +15,8 @@
 // to report the results back to the caller. When the tests are finished, return
 // a possible error to the callback or null if none.
 
-debugger;
-
 // tslint:disable-next-line:no-require-imports no-var-requires
 let testRunner = require('vscode/lib/testrunner');
-export default testRunner;
 
 let options: { [key: string]: string | boolean | number } = {
     ui: 'tdd', 		// the TDD UI is being used in extension.test.ts (suite, test, etc.)
@@ -57,19 +54,4 @@ console.warn(`Mocha options: ${JSON.stringify(options, null, 2)}`);
 // tslint:disable-next-line: no-unsafe-any
 testRunner.configure(options);
 
-var cache = {};
-
-// function importAll(r) {
-//     r.keys().forEach(key => cache[key] = r(key));
-// }
-
-// importAll((<any>require).context('./', true, /^\.\/*\.js/));
-// let all: string;
-// all = '';
-// require('./' + all + ".js");
-
-// import './assertEx';
-// import './assertEx.test';
-// import './global.test';
-// import './nonNull.test';
-
+module.exports = testRunner;

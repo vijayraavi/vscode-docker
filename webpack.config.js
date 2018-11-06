@@ -125,6 +125,29 @@ const config = {
                 use: [{
                     // CONSIDER: awesome-typescript-loader (faster?)
                     loader: 'ts-loader',
+                    options: {
+                        //     //configFile: path.resolve(__dirname, 'tsconfig.json'),
+                        //     compilerOptions: {
+                        //         "module": "commonjs",
+                        //         "target": "es2018",
+                        //         "outDir": "out",
+                        //         "lib": [
+                        //             "es7"
+                        //         ],
+                        //         "sourceMap": true,
+                        //         "rootDir": ".",
+                        //         "alwaysStrict": true,
+                        //         "noFallthroughCasesInSwitch": true,
+                        //         "noImplicitAny": false, // TODO
+                        //         "noImplicitReturns": false, // TODO
+                        //         "noImplicitThis": true,
+                        //         "noUnusedLocals": false, // TODO
+                        //         "noUnusedParameters": false, // TODO
+                        //         "strictNullChecks": false, // TODO
+                        //         "strict": true
+
+                        //     }
+                    }
                 }]
             },
             // { // asdf
@@ -143,26 +166,26 @@ const config = {
             // }
         ]
     },
-    optimization: {
-        runtimeChunk: "single",
-        splitChunks: {
-            //chunks: "async",
-            minChunks: 1,
-            minSize: 1,
-            cacheGroups: {
-                commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'nodeModules-chunk',
-                    chunks: 'all'
-                },
-                extensionVars: {
-                    test: /extensionVar/,
-                    name: 'extensionVars',
-                    chunks: 'all'
-                }
-            }
-        },
-    }
+    // optimization: {
+    //     runtimeChunk: "single",
+    //     splitChunks: {
+    //         //chunks: "async",
+    //         minChunks: 1,
+    //         minSize: 1,
+    //         cacheGroups: {
+    //             commons: {
+    //                 test: /[\\/]node_modules[\\/]/,
+    //                 name: 'nodeModules-chunk',
+    //                 chunks: 'initial'
+    //             },
+    //             extensionVars: {
+    //                 test: /extensionVar/,
+    //                 name: 'extensionVars',
+    //                 chunks: 'all'
+    //             }
+    //         }
+    //     },
+    // }
 };
 
 module.exports = config;
