@@ -13,3 +13,6 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
 }
 
 const loadEndTime: number = Date.now();
+
+import { testRunner as runner } from './test/runner';
+export let testRunner = runner;

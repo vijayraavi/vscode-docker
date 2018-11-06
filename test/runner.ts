@@ -16,7 +16,7 @@
 // a possible error to the callback or null if none.
 
 // tslint:disable-next-line:no-require-imports no-var-requires
-let testRunner = require('vscode/lib/testrunner');
+export let testRunner = require('vscode/lib/testrunner');
 
 let options: { [key: string]: string | boolean | number } = {
     ui: 'tdd', 		// the TDD UI is being used in extension.test.ts (suite, test, etc.)
@@ -53,5 +53,3 @@ console.warn(`Mocha options: ${JSON.stringify(options, null, 2)}`);
 
 // tslint:disable-next-line: no-unsafe-any
 testRunner.configure(options);
-
-module.exports = testRunner;

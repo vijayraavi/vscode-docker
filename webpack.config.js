@@ -18,14 +18,12 @@ const glob = require('glob');
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
 // Create a separate bundle for each test file, they'll get loaded by the test runner
-const testRoot = path.resolve(__dirname, 'out', 'test');
-let testFiles = glob.sync("*.js", { absolute: false, cwd: testRoot });
-console.log(testFiles);
+const testRoot = path.resolve(__dirname, 'test');
+let testFiles = glob.sync("*.ts", { absolute: false, cwd: testRoot });
 let testEntries = {};
 for (let file of testFiles) {
-    testEntries[`${path.join('test', path.dirname(file), path.basename(file, '.js'))}`] = `./out/test/${file}`;
+    testEntries[`${path.join('test', path.dirname(file), path.basename(file, '.ts'))}`] = `./test/${file}`;
 }
-console.log(testEntries);
 
 /**@type {import('webpack').Configuration}*/
 const config = {
@@ -40,7 +38,7 @@ const config = {
         extension: './entry.ts',
         './node_modules/dockerfile-language-server-nodejs/lib/server': './node_modules/dockerfile-language-server-nodejs/lib/server.js',
         'ms-rest/lib/msRest-chunk': './node_modules/ms-rest/lib/msRest.js',
-        'test/index': './out/test/index.js',
+        //'test/index': './out/test/index.js',
         ...testEntries
     },
     // {
@@ -80,7 +78,10 @@ const config = {
         // Ignore dynamic require in vscode-nls (in vscode-azureextensionui) for now, since we're not localized
         //new webpack.IgnorePlugin(/vscode-nls/),
         new CopyWebpackPlugin([
-            { from: './out/utils/getCoreNodeModule.js', to: './node_modules' }
+            { from: './out/utils/getCoreNodeModule.js', to: 'node_modules' }
+        ]),
+        new CopyWebpackPlugin([
+            { from: './test/index.js', to: 'test' }
         ])
         // new webpack.ContextReplacementPlugin(
         //     // The criterion to search: './node_modules/ms-rest/lib sync recursive'
@@ -158,12 +159,12 @@ const config = {
             //         base: path.join(__dirname, 'src')
             //     }
             // },
-            // {
-            //     // Unpack UMD module headers used in some modules since webpack doesn't
-            //     // handle them well
-            //     test: /dockerfile-language-service|vscode-languageserver/,
-            //     use: { loader: 'umd-compat-loader' }
-            // }
+            {
+                // Unpack UMD module headers used in some modules since webpack doesn't
+                // handle them well
+                test: /dockerfile-language-service|vscode-languageserver/,
+                use: { loader: 'umd-compat-loader' }
+            }
         ]
     },
     // optimization: {
@@ -188,4 +189,5 @@ const config = {
     // }
 };
 
+console.log(JSON.stringify(config, undefined, 2));
 module.exports = config;

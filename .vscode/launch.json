@@ -33,7 +33,7 @@
 			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceFolder}/../dist/test/**/*.js"
+				"${workspaceFolder}/../dist/**/*.js"
 			],
 			//"preLaunchTask": "npm: webpack",
 			"env": {
