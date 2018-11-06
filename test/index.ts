@@ -18,7 +18,8 @@
 debugger;
 
 // tslint:disable-next-line:no-require-imports no-var-requires
-export let testRunner = require('vscode/lib/testrunner');
+let testRunner = require('vscode/lib/testrunner');
+export default testRunner;
 
 let options: { [key: string]: string | boolean | number } = {
     ui: 'tdd', 		// the TDD UI is being used in extension.test.ts (suite, test, etc.)
