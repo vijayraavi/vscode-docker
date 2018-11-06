@@ -5,6 +5,7 @@
 
 import { unorderedArraysEqual, notUnorderedArraysEqual, throwsOrRejectsAsync } from "./assertEx";
 import * as assert from "assert";
+import { suite } from 'mocha';
 
 suite("assertEx", () => {
     test("areUnorderedArraysEqual", () => {

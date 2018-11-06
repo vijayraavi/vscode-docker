@@ -22,7 +22,7 @@ const testRoot = path.resolve(__dirname, 'test');
 let testFiles = glob.sync("*.ts", { absolute: false, cwd: testRoot });
 let testEntries = {};
 for (let file of testFiles) {
-    testEntries[`${path.join('test', path.dirname(file), path.basename(file, '.ts'))}`] = `./test/${file}`;
+    //testEntries[`${path.join('test', path.dirname(file), path.basename(file, '.ts'))}`] = `./test/${file}`;
 }
 
 /**@type {import('webpack').Configuration}*/

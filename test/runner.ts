@@ -53,3 +53,11 @@ console.warn(`Mocha options: ${JSON.stringify(options, null, 2)}`);
 
 // tslint:disable-next-line: no-unsafe-any
 testRunner.configure(options);
+
+import '../test/assertEx';
+import '../test/assertEx.test';
+
+// let originalRun = testRunner.run;
+// testRunner.run = function (...args: unknown[]) {
+//     originalRun(...args);
+// }
