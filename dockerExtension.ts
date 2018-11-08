@@ -3,10 +3,10 @@
  *  Licensed under the MIT License. See LICENSE.md in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-let loadStartTime = Date.now();
+debugger;
 
 import * as assert from 'assert';
-import * as opn from 'opn';
+import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as request from 'request-promise-native';
 import * as vscode from 'vscode';
@@ -57,6 +57,7 @@ import { browseAzurePortal } from './explorer/utils/browseAzurePortal';
 import { browseDockerHub, dockerHubLogout } from './explorer/utils/dockerHubUtils';
 import { ext } from "./extensionVariables";
 import { initializeTelemetryReporter, reporter } from './telemetry/telemetry';
+import { TestKeytar } from './test/testKeytar';
 import { AzureAccount } from './typings/azure-account.api';
 import { addUserAgent } from './utils/addUserAgent';
 import { AzureUtilityManager } from './utils/azureUtilityManager';
@@ -101,7 +102,7 @@ function initializeExtensionVariables(ctx: vscode.ExtensionContext): void {
     registerUIExtensionVariables(ext);
 }
 
-export async function activate(ctx: vscode.ExtensionContext): Promise<void> {
+export async function activate(ctx: vscode.ExtensionContext, loadStartTime: number, loadEndTime: number): Promise<void> {
     let activateStartTime = Date.now();
 
     initializeExtensionVariables(ctx);
@@ -275,35 +276,40 @@ namespace Configuration {
 }
 
 function activateLanguageClient(ctx: vscode.ExtensionContext): void {
-    let serverModule = ctx.asAbsolutePath(path.join("node_modules", "dockerfile-language-server-nodejs", "lib", "server.js"));
-    let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
+    // Don't wait
 
-    let serverOptions: ServerOptions = {
-        run: { module: serverModule, transport: TransportKind.ipc, args: ["--node-ipc"] },
-        debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
-    }
+    // tslint:disable-next-line:no-function-expression
+    callWithTelemetryAndErrorHandling('docker.languageclient.activate', async function (this: IActionContext): Promise<void> {
+        let serverModule = ctx.asAbsolutePath(path.join('dist', "dockerfile-language-server-nodejs", "lib", "server.js"));
+        assert(true === await fse.pathExists(serverModule), "Could not find language client module");
 
-    let middleware: Middleware = {
-        workspace: {
-            configuration: Configuration.computeConfiguration
+        let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
+
+        let serverOptions: ServerOptions = {
+            run: { module: serverModule, transport: TransportKind.ipc, args: ["--node-ipc"] },
+            debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
         }
-    };
 
-    let clientOptions: LanguageClientOptions = {
-        documentSelector: DOCUMENT_SELECTOR,
-        synchronize: {
-            fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
-        },
-        middleware: middleware
-    }
+        let middleware: Middleware = {
+            workspace: {
+                configuration: Configuration.computeConfiguration
+            }
+        };
 
-    client = new LanguageClient("dockerfile-langserver", "Dockerfile Language Server", serverOptions, clientOptions);
-    // tslint:disable-next-line:no-floating-promises
-    client.onReady().then(() => {
-        // attach the VS Code settings listener
-        Configuration.initialize();
+        let clientOptions: LanguageClientOptions = {
+            documentSelector: DOCUMENT_SELECTOR,
+            synchronize: {
+                fileEvents: vscode.workspace.createFileSystemWatcher('**/.clientrc')
+            },
+            middleware: middleware
+        }
+
+        client = new LanguageClient("dockerfile-langserver", "Dockerfile Language Server", serverOptions, clientOptions);
+        // tslint:disable-next-line:no-floating-promises
+        client.onReady().then(() => {
+            // attach the VS Code settings listener
+            Configuration.initialize();
+        });
+        client.start();
     });
-    client.start();
 }
-
-let loadEndTime = Date.now();

@@ -6,6 +6,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { docker } from '../../commands/utils/docker-endpoint';
+import { imagesPath } from '../../constants';
 import { AzureAccount } from '../../typings/azure-account.api';
 import { AzureUtilityManager } from '../../utils/azureUtilityManager';
 import { ContainerNode, ContainerNodeContextValue } from './containerNode';
@@ -230,14 +231,14 @@ export class RootNode extends NodeBase {
                 if (['exited', 'dead'].includes(containers[i].State)) {
                     contextValue = "stoppedLocalContainerNode";
                     iconPath = {
-                        light: path.join(__filename, '..', '..', '..', '..', 'images', 'light', 'stoppedContainer.svg'),
-                        dark: path.join(__filename, '..', '..', '..', '..', 'images', 'dark', 'stoppedContainer.svg')
+                        light: path.join(imagesPath, 'light', 'stoppedContainer.svg'),
+                        dark: path.join(imagesPath, 'dark', 'stoppedContainer.svg')
                     };
                 } else {
                     contextValue = "runningLocalContainerNode";
                     iconPath = {
-                        light: path.join(__filename, '..', '..', '..', '..', 'images', 'light', 'runningContainer.svg'),
-                        dark: path.join(__filename, '..', '..', '..', '..', 'images', 'dark', 'runningContainer.svg')
+                        light: path.join(imagesPath, 'light', 'runningContainer.svg'),
+                        dark: path.join(imagesPath, 'dark', 'runningContainer.svg')
                     };
                 }
 
