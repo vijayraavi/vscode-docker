@@ -6,7 +6,7 @@
 //@ts-check
 
 // Full webpack documentation: [https://webpack.js.org/configuration/]().
-// In short, the config-files defines the entry point of the extension, to use TypeScript, to produce a commonjs-module, and what modules not to bundle.
+// In short, the config-files defines the entrypoint of the extension, to use TypeScript, to produce a commonjs-module, and what modules not to bundle.
 // Using webpack helps reduce the install- and startup-time of large extensions because instead of hundreds of files, a single file is produced.
 
 'use strict';
@@ -101,7 +101,6 @@ const config = {
                     // Tell webpack we've solved the critical dependency issue
                     for (const d of context.dependencies) {
                         if (d.critical) d.critical = false;
-                        console.log('changed');
                     }
                 }
             })
@@ -140,6 +139,18 @@ const config = {
             //     }
             // }
         ]
+    },
+    optimization: {
+        splitChunks: {
+            minChunks: 1,
+            cacheGroups: {
+                'entry': {
+                    test: /entry/,
+                    priority: 100,
+                    name: 'entry'
+                }
+            }
+        }
     }
 };
 
