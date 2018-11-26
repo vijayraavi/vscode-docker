@@ -884,7 +884,7 @@
     "pretest": "free -m && npm run build && free -m && npm run webpack && free -m",
     "test": "gulp test",
     "all": "npm i && npm run lint && npm test",
-    "webpack": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode development",
+    "webpack": "free -m && cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode development && free -m",
     "webpack-prod": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode production",
     "webpack-profile": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --profile --json --mode production > webpack-stats.json && echo Use http://webpack.github.io/analyse to analyze the stats"
   },
