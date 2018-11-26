@@ -885,7 +885,7 @@
     "test": "gulp test",
     "all": "npm i && npm run lint && npm test",
     "webpack": "free -m && cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode development && free -m",
-    "webpack-prod": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode production",
+    "webpack-prod": "free -m && cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode production && free -m",
     "webpack-profile": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --profile --json --mode production > webpack-stats.json && echo Use http://webpack.github.io/analyse to analyze the stats"
   },
   "extensionDependencies": [
