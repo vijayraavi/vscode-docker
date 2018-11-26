@@ -869,6 +869,10 @@
   "engines": {
     "vscode": "^1.25.0"
   },
+  "config": {
+    "NODE_OPTIONS": "--max-old-space-size=8192",
+    "NODE_OPTIONS.$comment": "Without this, fails with out of memory on Linux"
+  },
   "scripts": {
     "vscode:prepublish": "npm run webpack-prod",
     "build": "tsc -p ./",
@@ -880,9 +884,9 @@
     "pretest": "npm run build && npm run webpack",
     "test": "gulp test",
     "all": "npm i && npm run lint && npm test",
-    "webpack": "webpack --mode development",
-    "webpack-prod": "webpack --mode production",
-    "webpack-profile": "webpack --profile --json --mode production > webpack-stats.json && echo Use http://webpack.github.io/analyse to analyze the stats"
+    "webpack": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode development",
+    "webpack-prod": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode production",
+    "webpack-profile": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --profile --json --mode production > webpack-stats.json && echo Use http://webpack.github.io/analyse to analyze the stats"
   },
   "extensionDependencies": [
     "vscode.docker",
@@ -902,6 +906,7 @@
     "adm-zip": "^0.4.11",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.4",
+    "cross-env": "^5.2.0",
     "gulp": "^3.9.1",
     "gulp-decompress": "^2.0.2",
     "gulp-download": "^0.0.1",
