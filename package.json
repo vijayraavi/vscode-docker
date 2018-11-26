@@ -874,7 +874,7 @@
     "NODE_OPTIONS.$comment": "Without this, webpack fails with out of memory on some systems"
   },
   "scripts": {
-    "vscode:prepublish": "npm run webpack-prod",
+    "vscode:prepublish": "npm run webpack && npm run webpack-prod",
     "build": "tsc -p ./",
     "compile": "tsc -watch -p ./",
     "package": "cross-env NODE_OPTIONS=$NODE_OPTIONS vsce package",
