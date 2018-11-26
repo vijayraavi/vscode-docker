@@ -870,23 +870,23 @@
     "vscode": "^1.25.0"
   },
   "config": {
-    "WP_NODE_OPTIONS": "--max-old-space-size=8192",
-    "WP_NODE_OPTIONS.$comment": "Without this, webpack fails with out of memory on some systems"
+    "NODE_OPTIONS": "--max-old-space-size=8192",
+    "NODE_OPTIONS.$comment": "Without this, webpack fails with out of memory on some systems"
   },
   "scripts": {
     "vscode:prepublish": "npm run webpack-prod",
     "build": "tsc -p ./",
     "compile": "tsc -watch -p ./",
-    "package": "vsce package",
+    "package": "cross-env NODE_OPTIONS=$NODE_OPTIONS vsce package",
     "lint": "tslint --project tsconfig.json -t verbose",
     "lint-fix": "tslint --project tsconfig.json -t verbose --fix",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "pretest": "free -m && npm run build && free -m && npm run webpack && free -m",
     "test": "gulp test",
     "all": "npm i && npm run lint && npm test",
-    "webpack": "cross-env NODE_OPTIONS=$WP_NODE_OPTIONS webpack --mode development",
-    "webpack-prod": "cross-env NODE_OPTIONS=$WP_NODE_OPTIONS webpack --mode production",
-    "webpack-profile": "cross-env NODE_OPTIONS=$WP_NODE_OPTIONS webpack --profile --json --mode production > webpack-stats.json && echo Use http://webpack.github.io/analyse to analyze the stats"
+    "webpack": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode development",
+    "webpack-prod": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode production",
+    "webpack-profile": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --profile --json --mode production > webpack-stats.json && echo Use http://webpack.github.io/analyse to analyze the stats"
   },
   "extensionDependencies": [
     "vscode.docker",
