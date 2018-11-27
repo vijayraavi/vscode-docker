@@ -874,7 +874,7 @@
     "NODE_OPTIONS.$comment": "Without this, webpack fails with out of memory on some systems"
   },
   "scripts": {
-    "vscode:prepublish": "npm run webpack && npm run webpack-prod",
+    "vscode:prepublish": "npm run webpack && npm run webpack",
     "build": "tsc -p ./",
     "compile": "tsc -watch -p ./",
     "package": "cross-env NODE_OPTIONS=$NODE_OPTIONS vsce package",
@@ -884,7 +884,7 @@
     "pretest": "free -m && npm run build && free -m && npm run webpack && free -m",
     "test": "gulp test",
     "all": "npm i && npm run lint && npm test",
-    "webpack": "free -m && cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode development && free -m",
+    "webpack": "echo asdf && free -m && cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode development && free -m",
     "webpack-prod": "free -m && cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --mode production && free -m",
     "webpack-profile": "cross-env NODE_OPTIONS=$NODE_OPTIONS webpack --profile --json --mode production > webpack-stats.json && echo Use http://webpack.github.io/analyse to analyze the stats"
   },
