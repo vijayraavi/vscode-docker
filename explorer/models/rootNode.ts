@@ -13,7 +13,7 @@ import { AzureUtilityManager } from '../../utils/azureUtilityManager';
 import { showDockerConnectionError } from '../utils/dockerConnectionError';
 import { ContainerNode, ContainerNodeContextValue } from './containerNode';
 import { ErrorNode } from './errorNode';
-import { ImageNode } from './imageNode';
+import { ImageGroupNode, ImageNode } from './imageNode';
 import { IconPath, NodeBase } from './nodeBase';
 import { RegistryRootNode } from './registryRootNode';
 
@@ -109,7 +109,7 @@ export class RootNode extends NodeBase {
     public async getChildren(element: RootNode): Promise<NodeBase[]> {
         switch (element.contextValue) {
             case 'imagesRootNode': {
-                return this.getImages();
+                return this.getImageNodes();
             }
             case 'containersRootNode': {
                 return this.getContainers();
@@ -123,7 +123,7 @@ export class RootNode extends NodeBase {
         }
     }
 
-    private async getImages(): Promise<(ImageNode | ErrorNode)[]> {
+    private async getImageNodes(): Promise<(ImageNode | ErrorNode)[]> {
         // tslint:disable-next-line:no-this-assignment
         let me = this;
 
@@ -139,15 +139,17 @@ export class RootNode extends NodeBase {
 
                 for (let image of images) {
                     if (!image.RepoTags) {
-                        let node = new ImageNode(`<none>:<none>`, image, me.eventEmitter);
-                        node.imageDesc = image;
+                        let node = new ImageGroupNode(`<none>:<none>`, image, me.eventEmitter);
                         imageNodes.push(node);
                     } else {
+                        let node = new ImageGroupNode(`${image.Id}`.slice(7, 7 + 12), image, me.eventEmitter);
+
                         for (let repoTag of image.RepoTags) {
-                            let node = new ImageNode(`${repoTag}`, image, me.eventEmitter);
-                            node.imageDesc = image;
-                            imageNodes.push(node);
+                            let node2 = new ImageNode(`${image.Id}`, image, me.eventEmitter);
+                            node.children.push(node2);
                         }
+
+                        imageNodes.push(node);
                     }
                 }
             } catch (error) {
